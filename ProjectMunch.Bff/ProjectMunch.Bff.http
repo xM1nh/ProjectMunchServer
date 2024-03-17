@@ -1,0 +1,6 @@
+@ProjectMunch.Bff_HostAddress = http://localhost:5122
+
+GET {{ProjectMunch.Bff_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

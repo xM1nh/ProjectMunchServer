@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ProjectMunch.Domain;
 using ProjectMunch.Models;
 using ProjectMunch.Persistence;
 using TodoApi;
@@ -24,6 +25,9 @@ builder.Services.AddDbContext<MunchContext>(options =>
     );
 });
 
+builder.Services.AddScoped<IPointOfInterestRepository, PointOfInterestRepository>();
+builder.Services.AddScoped<IPointOfInterestService, PointOfInterestService>();
+
 builder
     .Services.AddIdentityCore<ApplicationUser>()
     .AddRoles<IdentityRole>()
@@ -37,12 +41,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder
-    .Services.AddAuthentication(o =>
-    {
-        o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(o =>
     {
         o.TokenValidationParameters = new()

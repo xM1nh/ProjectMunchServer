@@ -1,15 +1,11 @@
 using FluentAssertions;
-using NetTopologySuite.Geometries;
 using NSubstitute;
 using ProjectMunch.Models;
-using Xunit.Abstractions;
 
 namespace ProjectMunch.Domain.Tests
 {
-    public class PointOfInterestServiceTests(ITestOutputHelper output)
+    public class PointOfInterestServiceTests
     {
-        private readonly ITestOutputHelper _output = output;
-
         [Fact]
         public void Create_NullRepository_ThrowsException()
         {
@@ -75,38 +71,101 @@ namespace ProjectMunch.Domain.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetAllInDistanceFromCenterTestData))]
-        public async Task GetAllInDistanceFromCenter_OnSuccess_ReturnsInstance(PointOfInterest center, int distance)
+        [InlineData(1, 1, 1)]
+        [InlineData(2, 2, 2)]
+        [InlineData(3, 3, 3)]
+        public async Task GetByDistanceFromCenter_OnSuccess_ReturnsInstance(
+            short longitude,
+            short latitude,
+            int distance
+        )
         {
             //Arrange
             var stubRepository = Substitute.For<IPointOfInterestRepository>();
-            stubRepository.GetAllInDistanceFromCenter(center, distance).Returns([]);
+            stubRepository.GetByDistanceFromCenter(default!, default).ReturnsForAnyArgs([]);
             var sut = new PointOfInterestService(stubRepository);
 
             //Act
-            var result = await sut.GetAllInDistanceFromCenter(center, distance);
+            var result = await sut.GetByDistanceFromCenter(longitude, latitude, distance);
 
             //Assert
             result.Should().NotBeNull();
         }
 
-        public static TheoryData<PointOfInterest, int> GetAllInDistanceFromCenterTestData
+        [Theory]
+        [InlineData(1, 1, "name1", "description1")]
+        [InlineData(2, 2, "name2", null)]
+        [InlineData(3, 3, "name3", "")]
+        public async Task Add_OnSuccess_ReturnsTrue(
+            short longitude,
+            short latitude,
+            string name,
+            string? description
+        )
         {
-            get
+            //Arrange
+            var stubRepository = Substitute.For<IPointOfInterestRepository>();
+            stubRepository.Find(default!).ReturnsForAnyArgs([]);
+            stubRepository.Add(default!).ReturnsForAnyArgs(true);
+            var sut = new PointOfInterestService(stubRepository);
+
+            //Act
+            var result = await sut.Add(longitude, latitude, name, description);
+
+            //Assert
+            result.Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(1, 1, "name1", "description1")]
+        [InlineData(2, 2, "name2", null)]
+        [InlineData(3, 3, "name3", "")]
+        public async Task Add_OnConflict_ReturnsFalse(
+            short longitude,
+            short latitude,
+            string name,
+            string? description
+        )
+        {
+            //Arrange
+            var stubPoi = new PointOfInterest()
             {
-                var data = new TheoryData<PointOfInterest, int>();
+                Coordinate = new(longitude, latitude),
+                Name = name,
+            };
+            var stubRepository = Substitute.For<IPointOfInterestRepository>();
+            stubRepository.Find(default!).ReturnsForAnyArgs([stubPoi]);
+            var sut = new PointOfInterestService(stubRepository);
 
-                var poi = new PointOfInterest()
-                {
-                    Name = "Test",
-                    Coordinate = new Point(1, 1)
-                };
-                var distance = 10;
+            //Act
+            var result = await sut.Add(longitude, latitude, name, description);
 
-                data.Add(poi, distance);
+            //Assert
+            result.Should().BeFalse();
+        }
 
-                return data;
-            }
+        [Theory]
+        [InlineData(1, 1, "name1", "description1")]
+        [InlineData(2, 2, "name2", null)]
+        [InlineData(3, 3, "name3", "")]
+        public async Task Add_OnFailure_ReturnsFalse(
+            short longitude,
+            short latitude,
+            string name,
+            string? description
+        )
+        {
+            //Arrange
+            var stubRepository = Substitute.For<IPointOfInterestRepository>();
+            stubRepository.Find(default!).ReturnsForAnyArgs([]);
+            stubRepository.Add(default!).ReturnsForAnyArgs(false);
+            var sut = new PointOfInterestService(stubRepository);
+
+            //Act
+            var result = await sut.Add(longitude, latitude, name, description);
+
+            //Assert
+            result.Should().BeFalse();
         }
     }
 }

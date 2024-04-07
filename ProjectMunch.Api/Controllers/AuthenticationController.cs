@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ProjectMunch.DTO.Authentication;
+using ProjectMunch.DTO.AuthenticationApi;
 using ProjectMunch.Models;
 using TodoApi;
 
@@ -66,11 +66,12 @@ namespace ProjectMunch.Api.Controllers
 
         [HttpDelete("logout")]
         [Authorize]
-        public async Task<Results<Ok, BadRequest>> Logout()
+        public async Task<Results<NoContent, BadRequest>> Logout()
         {
             var userName = HttpContext
-                .User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)
+                .User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
+
             var user = await _userManager.FindByNameAsync(userName!);
 
             if (user is null)
@@ -84,7 +85,7 @@ namespace ProjectMunch.Api.Controllers
                 "RefreshToken"
             );
 
-            return TypedResults.Ok();
+            return TypedResults.NoContent();
         }
 
         [HttpPost("refresh")]
@@ -94,8 +95,9 @@ namespace ProjectMunch.Api.Controllers
         > Refresh()
         {
             var userName = HttpContext
-                .User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)
+                .User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
+
             var user = await _userManager.FindByNameAsync(userName!);
             var token = HttpContext.Request.Headers.Authorization;
 

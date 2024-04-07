@@ -6,6 +6,11 @@ namespace ProjectMunch.Domain
     {
         Task<List<PointOfInterest>> GetAll();
         Task<PointOfInterest?> GetById(int id);
-        Task<List<PointOfInterest>> GetAllInDistanceFromCenter(PointOfInterest center, int distance);
+        Task<List<PointOfInterest>> GetByDistanceFromCenter(
+            short longitude,
+            short latitude,
+            int distance
+        );
+        Task<bool> Add(short longitude, short latitude, string name, string? description);
     }
 }

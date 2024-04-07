@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using ProjectMunch.DTO.Authentication;
+using ProjectMunch.DTO.AuthenticationApi;
 
 namespace ProjectMunch.Bff.Controllers
 {
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    public class AuthenticationController(ICacheService cacheService, AuthClient authClient)
-        : ControllerBase
+    public class AuthenticationController(ICacheService cacheService, ApiClient apiClient)
+        : ApiController
     {
         private readonly ICacheService _cacheService = cacheService;
-        private readonly AuthClient _client = authClient;
+        private readonly ApiClient _client = apiClient;
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<Results<Ok, UnauthorizedHttpResult>> Register(RegisterRequestDto request)
         {
             var response = await _client.RegisterAsync(request);
@@ -28,7 +26,7 @@ namespace ProjectMunch.Bff.Controllers
             return TypedResults.Ok();
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<Results<SignInHttpResult, UnauthorizedHttpResult>> Login(
             LoginRequestDto request
         )
@@ -54,7 +52,7 @@ namespace ProjectMunch.Bff.Controllers
             return TypedResults.SignIn(principal);
         }
 
-        [HttpDelete("/logout")]
+        [HttpDelete("logout")]
         [Authorize]
         public async Task<Results<SignOutHttpResult, BadRequest>> Logout()
         {
@@ -79,7 +77,7 @@ namespace ProjectMunch.Bff.Controllers
             return TypedResults.SignOut();
         }
 
-        [HttpPost("/refresh")]
+        [HttpPost("refresh")]
         [Authorize]
         public async Task<Results<SignInHttpResult, BadRequest, UnauthorizedHttpResult>> Refresh()
         {

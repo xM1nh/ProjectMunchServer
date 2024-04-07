@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using ProjectMunch.Persistence;
 namespace ProjectMunch.Persistence.Migrations
 {
     [DbContext(typeof(MunchContext))]
-    partial class MunchContextModelSnapshot : ModelSnapshot
+    [Migration("20240319112051_AddDataSeeding")]
+    partial class AddDataSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,22 +55,22 @@ namespace ProjectMunch.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "31970cf7-e77c-416a-ac9d-f73ef2894111",
-                            ConcurrencyStamp = "201323df-ce26-4ff3-bdb3-fafce7d9ec2a",
+                            Id = "66d1d245-a24d-4e8f-b56c-bf1a939b53e8",
+                            ConcurrencyStamp = "568fdfe3-325a-4954-b65c-3e388163da7f",
                             Name = "Verified",
                             NormalizedName = "VERIFIED"
                         },
                         new
                         {
-                            Id = "1f45ef73-4344-4ce7-8619-b3a4ba013b32",
-                            ConcurrencyStamp = "e968d8d2-89da-4478-9e8f-cbbf5d300e7a",
+                            Id = "4dd64f26-dfb7-4a1f-aed2-54bb8436909c",
+                            ConcurrencyStamp = "37a3fbf4-f83d-42ff-aea1-2c221a6cdfd8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "cf51d8b9-5465-4149-8184-8b3dacd05c12",
-                            ConcurrencyStamp = "dad59009-97ed-4f4d-8dfc-e708a4761714",
+                            Id = "e898c72d-004c-48a5-b754-59361b80691a",
+                            ConcurrencyStamp = "b49a675c-1ed0-4597-bff1-289614f6dd84",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -162,33 +165,33 @@ namespace ProjectMunch.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "156068d4-f2c2-48f6-808d-219e2de742d5",
-                            RoleId = "cf51d8b9-5465-4149-8184-8b3dacd05c12"
+                            UserId = "f130be1f-500e-4124-8ea7-983613207158",
+                            RoleId = "e898c72d-004c-48a5-b754-59361b80691a"
                         },
                         new
                         {
-                            UserId = "0712aaac-a550-461c-9051-6401ec876151",
-                            RoleId = "31970cf7-e77c-416a-ac9d-f73ef2894111"
+                            UserId = "6a7bf293-f030-4f64-bed7-c4b8e57b728f",
+                            RoleId = "66d1d245-a24d-4e8f-b56c-bf1a939b53e8"
                         },
                         new
                         {
-                            UserId = "0712aaac-a550-461c-9051-6401ec876151",
-                            RoleId = "cf51d8b9-5465-4149-8184-8b3dacd05c12"
+                            UserId = "6a7bf293-f030-4f64-bed7-c4b8e57b728f",
+                            RoleId = "e898c72d-004c-48a5-b754-59361b80691a"
                         },
                         new
                         {
-                            UserId = "c16a609f-7b0c-4d65-a002-d8c00a558c53",
-                            RoleId = "1f45ef73-4344-4ce7-8619-b3a4ba013b32"
+                            UserId = "bd6c6397-ab6c-439b-bf6a-7b5b9a58e21b",
+                            RoleId = "4dd64f26-dfb7-4a1f-aed2-54bb8436909c"
                         },
                         new
                         {
-                            UserId = "c16a609f-7b0c-4d65-a002-d8c00a558c53",
-                            RoleId = "31970cf7-e77c-416a-ac9d-f73ef2894111"
+                            UserId = "bd6c6397-ab6c-439b-bf6a-7b5b9a58e21b",
+                            RoleId = "66d1d245-a24d-4e8f-b56c-bf1a939b53e8"
                         },
                         new
                         {
-                            UserId = "c16a609f-7b0c-4d65-a002-d8c00a558c53",
-                            RoleId = "cf51d8b9-5465-4149-8184-8b3dacd05c12"
+                            UserId = "bd6c6397-ab6c-439b-bf6a-7b5b9a58e21b",
+                            RoleId = "e898c72d-004c-48a5-b754-59361b80691a"
                         });
                 });
 
@@ -277,49 +280,46 @@ namespace ProjectMunch.Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c16a609f-7b0c-4d65-a002-d8c00a558c53",
+                            Id = "bd6c6397-ab6c-439b-bf6a-7b5b9a58e21b",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9bc43052-e931-4a7e-aaa5-9ef0125ec8e0",
+                            ConcurrencyStamp = "512414a6-a335-4ca7-bff8-c74c68a0c1ad",
                             Email = "admin@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMD16hI0kmUkdISF36b23FznrX+BsVpz3OXCLbzh7YsQfp7+ZH6o0Ul4c6pITpMHtQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e8c1dec2-5b8a-4eca-b214-8effaea2bd97",
+                            SecurityStamp = "a7948c9b-3ac2-4ba2-b348-b15fb60f97b0",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "0712aaac-a550-461c-9051-6401ec876151",
+                            Id = "6a7bf293-f030-4f64-bed7-c4b8e57b728f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a14857a7-4417-41df-b73a-7c6c83ed4c52",
+                            ConcurrencyStamp = "3070a88a-0ec9-4eb3-be3a-603bf744a1d2",
                             Email = "verified@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "VERIFIED@EXAMPLE.COM",
                             NormalizedUserName = "VERIFIED",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPuVJnf+XvzsZWUpYCrozZ6/uzRZU9Lxip/BJPq1qryhh19ThMywpL3bkdBVCDmVkA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e59b4cdd-f78f-4780-885d-48e402a47080",
+                            SecurityStamp = "07078d2c-cb94-4763-a680-ccb98edebd4b",
                             TwoFactorEnabled = false,
                             UserName = "verified"
                         },
                         new
                         {
-                            Id = "156068d4-f2c2-48f6-808d-219e2de742d5",
+                            Id = "f130be1f-500e-4124-8ea7-983613207158",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "872d4735-bb62-4d7b-925d-1bbd7ded8f81",
+                            ConcurrencyStamp = "9e3c868e-527b-415e-ae8c-e9021bb821a2",
                             Email = "user@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@EXAMPLE.COM",
                             NormalizedUserName = "USER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAv1Yybfyt8PFI29O/brNDV+q2CqkEN89Hgq2jLRHgB5hPpOSNKn5PvEtj2vGHU94g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ef1469c9-4bc8-47d6-9520-d6d386d5d041",
+                            SecurityStamp = "bcc363f7-0196-4b11-9fc7-2c3e51b8420c",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });

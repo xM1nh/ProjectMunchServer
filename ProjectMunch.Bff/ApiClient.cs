@@ -1,11 +1,14 @@
-﻿using ProjectMunch.DTO.Authentication;
+﻿using ProjectMunch.Bff.Dto;
+using ProjectMunch.DTO.AuthenticationApi;
 
 namespace ProjectMunch.Bff
 {
-    public class AuthClient(HttpClient client)
+    public class ApiClient(HttpClient client, IConfiguration configuration)
     {
         private readonly HttpClient _client = client;
+        private readonly IConfiguration _configuration = configuration;
 
+        #region Auth
         public async Task<bool> RegisterAsync(RegisterRequestDto request)
         {
             var response = await _client.PostAsJsonAsync("authentication/register", request);
@@ -61,5 +64,28 @@ namespace ProjectMunch.Bff
 
             return true;
         }
+        #endregion
+
+        #region Third Party API
+        public async Task<MapBoxGeocodingResponseDto?> GetReverseGeocoding(
+            float longitude,
+            float latitude
+        )
+        {
+            var accessToken = _configuration["ApiKey:MapBox"];
+            ArgumentException.ThrowIfNullOrEmpty(accessToken);
+
+            var response = await _client.GetAsync(
+                $"https://api.mapbox.com/geocoding/v5/mapbox.places/{longitude},{latitude}.json?access_token={accessToken}"
+            );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<MapBoxGeocodingResponseDto>();
+        }
+        #endregion
     }
 }
